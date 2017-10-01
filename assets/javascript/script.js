@@ -1,6 +1,53 @@
   var storeChoice;
   var ourChoice;
 
+ // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDRp4UdWueWFKg3Z61f8GjujC3cwucpRZ0",
+     authDomain: "rps-multiplayer-e165f.firebaseapp.com",
+    databaseURL: "https://rps-multiplayer-e165f.firebaseio.com",
+    projectId: "rps-multiplayer-e165f",
+    storageBucket: "",
+    messagingSenderId: "74935383626"
+  };
+  firebase.initializeApp(config);
+
+
+$("#myForm").submit(function username(e) {
+    e.preventDefault()
+
+    playerName = $(".userName").val().trim();
+    console.log("playerName = " + playerName);
+
+   firebase.database().ref().push({
+    username: playerName,
+    dateAdded: firebase.database.ServerValue.TIMESTAMP
+
+    
+  });
+})
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // working RPS Code - don't touch
+
    document.onkeyup = function(event){
       storeChoice = event.key;
       console.log("store choice" + " " + storeChoice);
