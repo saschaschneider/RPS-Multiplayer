@@ -1,6 +1,8 @@
   var storeChoice;
   var ourChoice;
 
+
+
  // Initialize Firebase
   var config = {
     apiKey: "AIzaSyDRp4UdWueWFKg3Z61f8GjujC3cwucpRZ0",
@@ -12,20 +14,47 @@
   };
   firebase.initializeApp(config);
 
+  var database = firebase.database();
 
-$("#myForm").submit(function username(e) {
+
+$("#myFormP1, #myFormP2").submit(function username(e) {
     e.preventDefault()
 
-    playerName = $(".userName").val().trim();
-    console.log("playerName = " + playerName);
+    playerName1 = $(".userNameP1").val().trim();
+    playerName2 = $(".userNameP2").val().trim();
+    
 
    firebase.database().ref().push({
-    username: playerName,
+    username1: playerName1,
+    username2: playerName2,
     dateAdded: firebase.database.ServerValue.TIMESTAMP
 
-    
   });
+
+     database.ref().orderByChild("dateAdded").limitToLast(1).on("child_added", function(snapshot) {
+      // storing the snapshot.val() in a variable for convenience
+      var sv = snapshot.val();
+    
+
+      if (sv.username1.length > 0 ) {
+        $(".userNameP1").val(""); // clearing the username the user put in the form
+      $(".fieldsetP1").attr("disabled", "disabled"); //disabling the P1 form, so no additional input can be added
+      $(".nameP1").html("Welcome "+sv.username1+ ", you are Player 1"); // Adding personal greating message
+      }
+      else if (sv.username2.length > 0 ) {
+        $(".userNameP2").val(""); // clearing the username the user put in the form
+      $(".fieldsetP2").attr("disabled", "disabled"); //disabling the P1 form, so no additional input can be added
+      $(".nameP2").html("Welcome "+sv.username2+ ", you are Player 2"); // Adding personal greating message
+      }
+
+   })
+    
 })
+
+
+
+
+
 
     
 
