@@ -1,7 +1,18 @@
-  var storeChoice;
-  var ourChoice;
-
-
+var buttonpressedP1 = false;
+var buttonpressedP2 = false;
+var choiceP1Pressed = false;
+var choiceP2Pressed = false;
+var choiceP1;
+var choiceP2;
+var GameScore;
+var scoreP1;
+var scoreP2;
+scoreP1 = 0;
+scoreP2 = 0;
+var games;
+var gamesTie;
+games = 0;
+gamesTie = 0;
 
  // Initialize Firebase
   var config = {
@@ -16,13 +27,9 @@
 
   var database = firebase.database();
 
-var buttonpressedP1 = false;
-var buttonpressedP2 = false;
 
 $("#myFormP1, #myFormP2").submit(function username(e) {
             e.preventDefault()
-
-
 
             playerName1 = $(".userNameP1").val().trim();
             playerName2 = $(".userNameP2").val().trim();
@@ -34,7 +41,7 @@ $("#myFormP1, #myFormP2").submit(function username(e) {
               buttonpressedP1 = true;
               $(".fieldsetP1").attr("disabled", "disabled"); //disabling the P1 form, so no additional input can be added
               $(".nameP1").html("Welcome "+playerName1+ ", you are Player 1"); // Adding personal greating message
-              $(".userNameP1").attr("placeholder","Waiting for PLayer 2");
+              $(".userNameP1").attr("placeholder","");
 
             } 
             
@@ -42,6 +49,7 @@ $("#myFormP1, #myFormP2").submit(function username(e) {
               buttonpressedP2 = true;
               $(".fieldsetP2").attr("disabled", "disabled"); //disabling the P1 form, so no additional input can be added
               $(".nameP2").html("Welcome "+playerName2+ ", you are Player 2"); // Adding personal greating message
+              $(".userNameP2").attr("placeholder","");
 
               }
              
@@ -58,16 +66,10 @@ $("#myFormP1, #myFormP2").submit(function username(e) {
           $(".userNameP2").val(""); // clearing the username the user put in the form
 
            }
-
       })
 
-
-var choiceP1Pressed = false;
-var choiceP2Pressed = false;
-var choiceP1;
-var choiceP2;    
+ 
 $(".cardgroupP1, .cardgroupP2").on('click', ".btn", function button() {
-
 
     if ($(this).attr("class") === "btn btn-primary p1") {
         choiceP1 = $(this).val();
@@ -89,6 +91,9 @@ $(".cardgroupP1, .cardgroupP2").on('click', ".btn", function button() {
                  {
                   console.log("P1 selected End= " + choiceP1);
                   console.log("P2 selected End= " + choiceP2);
+              
+          if (choiceP1.length > 1 && choiceP2.length > 1){
+
               if (
                   (choiceP1 === "Rock" && choiceP2 === "Scissors") ||
                   (choiceP1 === "Paper") && (choiceP2 === "Rock") ||
@@ -96,23 +101,37 @@ $(".cardgroupP1, .cardgroupP2").on('click', ".btn", function button() {
                   { 
                   console.log("P1 wins");
                   $(".outcome-text").html("Player 1 Wins") 
-
+                  scoreP1 = scoreP1 +1;
+                  choiceP1 = "";
+                  choiceP2 = "";
                   } 
                   else if (choiceP1 === choiceP2)
                   {
                   console.log("we tie"); // tie conditions
                   $(".outcome-text").html("This is a tie")
+                  choiceP1 = "";
+                  choiceP2 = "";
+                  gamesTie = gamesTie +1;
                   }
                   else
                   {
                   console.log("p2 wins"); // losing condition
                   $(".outcome-text").html("PLayer 2 wins")
+                  scoreP2 = scoreP2 +1;
+                  choiceP1 = "";
+                  choiceP2 = "";
                   }
    }
-   else 
-   {
-   setTimeout(button,250); 
-   }})
+       gameScore = scoreP1 + " / " + scoreP2;
+       games = (scoreP1 + scoreP2 + gamesTie);
+      $(".cardScore").html("Score: " +gameScore);
+      $(".gameCount").html("Games Played: " +games);
+
+
+     
+
+ }})
+
 
     
 
